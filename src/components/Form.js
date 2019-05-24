@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 
 import { ThemeContext } from '../contexts/ThemeContext';
-import { withLanguageContext } from '../contexts/LanguageContext';
+import { LanguageContext } from '../contexts/LanguageContext';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -39,41 +39,39 @@ const words = {
   }
 }
 
-class Form extends Component {
-  static contextType = ThemeContext;
-  render() {
-    const { isDarkMode } = this.context;
-    const { language, changeLanguage } = this.props.languageContext;
-    const { classes } = this.props;
-    const { email, signIn, password, remember } = words[language];
-    return (
-      <main className={classes.main}>
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography variant='h5'>{signIn}</Typography>
-          <Select value={language} onChange={changeLanguage}>
-            <MenuItem value='english'>English</MenuItem>
-            <MenuItem value='french'>French</MenuItem>
-            <MenuItem value='german'>German</MenuItem>
-          </Select>
-          <form className={classes.form}>
-            <FormControl margin='normal' require='true' fullWidth>
-              <InputLabel htmlFor='email'>{email}</InputLabel>
-              <Input id='email' name='email' autoFocus />
-            </FormControl>
-            <FormControl margin='normal' require='true' fullWidth>
-              <InputLabel htmlFor='password'>{password}</InputLabel>
-              <Input id='password' name='password' />
-            </FormControl>
-            <FormControlLabel control={<Checkbox color='primary' />} label={remember} />
-            <Button variant='contained' type='submit' fullWidth color={isDarkMode ? 'default' : 'primary'} className={classes.submit}>{signIn}</Button>
-          </form>
-        </Paper>
-      </main>
-    )
-  }
+const Form = props => {
+  const { isDarkMode } = useContext(ThemeContext);
+  const { language, changeLanguage } = useContext(LanguageContext);
+
+  const { classes } = props;
+  const { email, signIn, password, remember } = words[language];
+  return (
+    <main className={classes.main}>
+      <Paper className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography variant='h5'>{signIn}</Typography>
+        <Select value={language} onChange={changeLanguage}>
+          <MenuItem value='english'>English</MenuItem>
+          <MenuItem value='french'>French</MenuItem>
+          <MenuItem value='german'>German</MenuItem>
+        </Select>
+        <form className={classes.form}>
+          <FormControl margin='normal' require='true' fullWidth>
+            <InputLabel htmlFor='email'>{email}</InputLabel>
+            <Input id='email' name='email' autoFocus />
+          </FormControl>
+          <FormControl margin='normal' require='true' fullWidth>
+            <InputLabel htmlFor='password'>{password}</InputLabel>
+            <Input id='password' name='password' />
+          </FormControl>
+          <FormControlLabel control={<Checkbox color='primary' />} label={remember} />
+          <Button variant='contained' type='submit' fullWidth color={isDarkMode ? 'default' : 'primary'} className={classes.submit}>{signIn}</Button>
+        </form>
+      </Paper>
+    </main>
+  )
 }
 
-export default withLanguageContext(withStyles(styles)(Form));
+export default withStyles(styles)(Form);
